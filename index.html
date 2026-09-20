@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>旅費記帳</title>
+<meta name="description" content="旅行記帳：匯率換算、分類記帳、預算與花費圖表，支援離線使用。">
+<meta name="theme-color" content="#0e7c86">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top" id="top"></header>
+<main id="main" tabindex="-1"></main>
+<button class="fab" id="fab" data-act="add" aria-label="新增花費">＋</button>
+<nav class="nav" id="nav" aria-label="主選單">
+  <button data-tab="ledger"><span aria-hidden="true">🧾</span>明細</button>
+  <button data-tab="stats"><span aria-hidden="true">📊</span>統計</button>
+  <button data-tab="rates"><span aria-hidden="true">💱</span>匯率</button>
+  <button data-tab="settings"><span aria-hidden="true">⚙️</span>設定</button>
+</nav>
+<dialog id="sheet" aria-label="表單"></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="importFile" accept="application/json,.json" hidden>
+<script src="app.js"></script>
+</body>
+</html>

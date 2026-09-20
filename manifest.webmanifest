@@ -1,0 +1,15 @@
+{
+  "name": "旅費記帳",
+  "short_name": "旅費記帳",
+  "description": "旅行記帳：匯率換算、分類記帳、預算與花費圖表，支援離線使用。",
+  "lang": "zh-Hant",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f6f8",
+  "theme_color": "#0e7c86",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
