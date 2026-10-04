@@ -12,6 +12,7 @@
 </head>
 <body>
 <header class="top" id="top"></header>
+<section id="cloudPanel" class="cloud-panel" aria-label="雲端同步"></section>
 <main id="main" tabindex="-1"></main>
 <button class="fab" id="fab" data-act="add" aria-label="新增花費">＋</button>
 <nav class="nav" id="nav" aria-label="主選單">
@@ -23,6 +24,9 @@
 <dialog id="sheet" aria-label="表單"></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="importFile" accept="application/json,.json" hidden>
+<script src="cloud-config.js"></script>
+<script src="sync-merge.js"></script>
+<script src="cloud.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

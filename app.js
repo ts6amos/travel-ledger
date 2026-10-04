@@ -77,7 +77,7 @@ let sheetHook = null;
 
 function loadState() {
   try {
-    const raw = localStorage.getItem(STORE_KEY);
+    const raw = localStorage.getItem(window.LedgerCloud?.key() || STORE_KEY);
     if (raw) {
       const d = JSON.parse(raw);
       if (d && Array.isArray(d.trips)) return { v: 1, current: null, fx: { rates: {}, updatedAt: 0, source: '' }, ...d };
@@ -86,7 +86,10 @@ function loadState() {
   return { v: 1, trips: [], current: null, fx: { rates: {}, updatedAt: 0, source: '' } };
 }
 function save() {
-  try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); }
+  try {
+    if (window.LedgerCloud) { window.LedgerCloud.persist(S); window.LedgerCloud.changed(); }
+    else localStorage.setItem(STORE_KEY, JSON.stringify(S));
+  }
   catch { toast('儲存失敗：瀏覽器儲存空間不足或被停用，請先匯出備份'); }
 }
 const curTrip = () => S.trips.find(t => t.id === S.current) || S.trips[0] || null;
@@ -431,7 +434,7 @@ function viewSettings(t) {
   <section class="card"><h2>資料匯出與備份</h2>
     <div class="btn-row stretch"><button class="btn" data-act="exportCsv">匯出 CSV（Excel 可開）</button><button class="btn" data-act="exportJson">備份全部資料</button></div>
     <div class="btn-row stretch" style="margin-top:8px"><button class="btn" data-act="importJson">匯入備份檔</button><button class="btn" data-act="sample">載入範例旅程</button></div>
-    <p class="hint">資料只存在這台裝置的瀏覽器中，清除瀏覽器資料會一併消失，建議旅程結束後備份。</p>
+    <p class="hint">未登入時資料只存在本機；登入並顯示「已同步」後可跨裝置使用。離線或尚未同步的帳目仍需備份。</p>
   </section>
   <section class="card"><h2>關於</h2>
     <p class="hint" style="margin:0">匯率來源：${esc(S.fx.source || '尚未取得')}。手續費預設 ${t.feePct}%，可在「編輯旅程」修改，也可每筆單獨調整。<br>把網頁「加入主畫面」即可像 App 一樣使用，沒網路時也能記帳。</p>
@@ -760,3 +763,15 @@ if (!S.trips.length) setTimeout(() => { if (!S.trips.length && !sheet.open) open
 if (!S.fx.updatedAt || Date.now() - S.fx.updatedAt > RATE_TTL) refreshRates(false);
 window.addEventListener('online', () => refreshRates(false));
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
+
+window.LedgerCloud?.start({
+  get: () => S,
+  editing: () => sheet.open,
+  set: state => {
+    S = state;
+    if (!S.trips.some(t => t.id === S.current)) S.current = S.trips[0]?.id || null;
+    render();
+  },
+  empty: () => ({ v: 1, trips: [], current: null, fx: S.fx }),
+  toast
+});

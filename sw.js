@@ -1,6 +1,6 @@
 // 離線快取：App 本身（HTML/CSS/JS）採「先用快取、背景更新」。匯率資料由 app.js 自己存在 localStorage。
-const CACHE = 'travel-ledger-v1';
-const ASSETS = ['./', './index.html', './app.css', './app.js', './manifest.webmanifest', './icon.svg'];
+const CACHE = 'travel-ledger-v2-cloud';
+const ASSETS = ['./', './index.html', './app.css', './app.js', './cloud-config.js', './sync-merge.js', './cloud.js', './manifest.webmanifest', './icon.svg'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
