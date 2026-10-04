@@ -251,3 +251,8 @@ legend { font-size: .85rem; color: var(--muted); padding: 0; margin-bottom: 6px;
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 dialog[open] ~ .toast { bottom: 24px; }
 @media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+
+.cloud-panel { max-width: 720px; margin: 12px auto 0; padding: 0 16px; }
+.cloud-panel summary { cursor: pointer; font-weight: 600; overflow-wrap: anywhere; }
+.cloud-panel form { max-width: 480px; }
+.cloud-panel .btn-row { flex-wrap: wrap; }
