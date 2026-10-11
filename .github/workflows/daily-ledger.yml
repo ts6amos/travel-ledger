@@ -1,0 +1,43 @@
+name: Daily Ledger checks
+on:
+  pull_request:
+  push:
+    branches: [main, feat/daily-ledger]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax and existing travel tests
+        run: |
+          node --check sw.js
+          node --test tests/*.test.cjs
+      - name: Daily model, synchronization and cache isolation tests
+        run: |
+          node --check daily/app.js
+          node --check daily/cloud.js
+          node --check daily/model.js
+          node --check daily/sw.js
+          node --test daily/tests/*.test.cjs
+      - name: Install browser test dependency
+        run: npm install --no-save playwright@1.64.0
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Browser acceptance
+        run: node daily/tests/ui.cjs
+      - name: Verify real Supabase rejects anonymous ledger access
+        run: node daily/tests/live-anon.cjs
+      - name: Save synthetic test screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-browser-checks
+          path: daily/test-output/
+          if-no-files-found: ignore
